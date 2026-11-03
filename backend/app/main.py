@@ -48,16 +48,36 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
 # Include API routes
 app.include_router(api_router)
 
-@app.get("/")
-def root():
-    return {
-        "system": "NetGuard Network Anomaly Detection System",
-        "api_docs": "/docs",
-        "health": "/api/health"
-    }
+DIST_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "frontend", "dist")
+
+if os.path.exists(DIST_DIR):
+    assets_dir = os.path.join(DIST_DIR, "assets")
+    if os.path.exists(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        # Don't intercept API or docs routes
+        if full_path.startswith("api/") or full_path in ["docs", "openapi.json", "redoc"]:
+            return None
+        file_path = os.path.join(DIST_DIR, full_path)
+        if full_path and os.path.exists(file_path) and os.path.isfile(file_path):
+            return FileResponse(file_path)
+        return FileResponse(os.path.join(DIST_DIR, "index.html"))
+else:
+    @app.get("/")
+    def root():
+        return {
+            "system": "NetGuard Network Anomaly Detection System",
+            "api_docs": "/docs",
+            "health": "/api/health"
+        }
 
 if __name__ == "__main__":
     import uvicorn
