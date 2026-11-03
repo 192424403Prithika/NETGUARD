@@ -1,0 +1,36 @@
+# Dependencies
+frontend/node_modules/
+node_modules/
+
+# Production build
+frontend/dist/
+dist/
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+backend/uploaded_datasets/*
+!backend/uploaded_datasets/.gitkeep
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Database (optional - uncomment if you do not want to push local db)
+# netguard.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
