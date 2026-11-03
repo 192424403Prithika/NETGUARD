@@ -1,7 +1,7 @@
 services:
-  # 1. Backend Web Service (FastAPI)
+  # NetGuard Unified Full-Stack Service (FastAPI + React Frontend)
   - type: web
-    name: netguard-backend
+    name: netguard
     runtime: python
     plan: free
     buildCommand: "pip install -r backend/requirements.txt"
@@ -9,20 +9,3 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
-
-  # 2. Frontend Static Site (React Vite SPA)
-  - type: web
-    name: netguard-frontend
-    runtime: static
-    buildCommand: "cd frontend && npm install && npm run build"
-    staticPublishPath: "./frontend/dist"
-    routes:
-      - type: rewrite
-        source: "/*"
-        destination: "/index.html"
-    envVars:
-      - key: VITE_API_URL
-        fromService:
-          type: web
-          name: netguard-backend
-          property: url

@@ -2,10 +2,6 @@
 frontend/node_modules/
 node_modules/
 
-# Production build
-frontend/dist/
-dist/
-
 # Python cache & artifacts
 __pycache__/
 *.py[cod]
